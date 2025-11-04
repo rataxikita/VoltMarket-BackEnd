@@ -10,10 +10,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Manejador global simple de excepciones para respuestas JSON consistentes.
- * Nota: Los controladores también tienen handlers locales; este actúa como respaldo.
- */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 

@@ -38,7 +38,6 @@ public class CommentController {
             @Valid @RequestBody CreateCommentRequest request,
             HttpServletRequest httpRequest
     ) {
-        // Obtener userId del token JWT (guardado por el interceptor)
         Long userId = (Long) httpRequest.getAttribute("userId");
         
         if (userId == null) {

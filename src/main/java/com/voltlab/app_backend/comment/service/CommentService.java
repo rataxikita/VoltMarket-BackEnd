@@ -31,11 +31,9 @@ public class CommentService {
 
     @Transactional
     public CommentResponse createComment(Long userId, CreateCommentRequest request) {
-        // Verificar que el producto existe
         Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
-        // Crear comentario
         Comment comment = new Comment();
         comment.setUserId(userId);
         comment.setProduct(product);
@@ -50,7 +48,6 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("Comentario no encontrado"));
         
-        // Verificar que el usuario es el dueño del comentario
         if (!comment.getUserId().equals(userId)) {
             throw new RuntimeException("No tienes permiso para eliminar este comentario");
         }
@@ -59,7 +56,6 @@ public class CommentService {
     }
 
     private CommentResponse toResponse(Comment comment) {
-        // Obtener información del usuario
         User user = userRepository.findById(comment.getUserId()).orElse(null);
         
         CommentResponse.UserInfo userInfo = null;

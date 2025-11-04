@@ -92,10 +92,4 @@ public class AuthService {
         userRepository.save(user);
     }
     
-    /**
-     * Método temporal para diagnóstico - SOLO PARA DESARROLLO
-     */
-    public java.util.Optional<User> findUserByEmail(String email) {
-        return userRepository.findByemail(email);
-    }
 }

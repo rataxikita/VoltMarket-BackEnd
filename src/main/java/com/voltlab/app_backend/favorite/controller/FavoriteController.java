@@ -43,10 +43,6 @@ public class FavoriteController {
         return ResponseEntity.ok(body);
     }
 
-    /**
-     * Verificar si un producto está en favoritos del usuario
-     * GET /api/favorites/{userId}/check/{productId}
-     */
     @GetMapping("/{userId}/check/{productId}")
     public ResponseEntity<Map<String, Boolean>> checkFavorite(
             @PathVariable("userId") Long userId,

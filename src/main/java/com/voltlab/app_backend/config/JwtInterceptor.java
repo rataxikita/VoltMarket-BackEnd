@@ -17,8 +17,6 @@ public class JwtInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        
-        // Permitir OPTIONS (preflight CORS)
         if ("OPTIONS".equals(request.getMethod())) {
             return true;
         }
@@ -26,13 +24,11 @@ public class JwtInterceptor implements HandlerInterceptor {
         String path = request.getRequestURI();
         String method = request.getMethod();
         
-        // Rutas públicas (no requieren token)
         if (isPublicPath(path, method)) {
             log.debug("Ruta pública permitida: {} {}", method, path);
             return true;
         }
 
-        // Obtener header Authorization
         String authHeader = request.getHeader("Authorization");
         
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -43,10 +39,8 @@ public class JwtInterceptor implements HandlerInterceptor {
         }
 
         try {
-            // Extraer token (quitando "Bearer ")
             String token = authHeader.substring(7);
             
-            // Validar token
             if (!jwtUtil.validateToken(token)) {
                 log.warn("Token inválido o expirado para ruta: {}", path);
                 sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, 
@@ -54,7 +48,6 @@ public class JwtInterceptor implements HandlerInterceptor {
                 return false;
             }
 
-            // Guardar datos del usuario en los atributos del request
             Long userId = jwtUtil.extractUserId(token);
             String email = jwtUtil.extractEmail(token);
             String role = jwtUtil.extractRole(token);
@@ -74,34 +67,25 @@ public class JwtInterceptor implements HandlerInterceptor {
         }
     }
     
-    /**
-     * Verifica si la ruta es pública (no requiere autenticación)
-     * GET de productos y comentarios son públicos, pero POST/PUT/DELETE requieren autenticación
-     */
     private boolean isPublicPath(String path, String method) {
-        // Rutas de autenticación siempre públicas
         if (path.startsWith("/api/auth/login") || path.startsWith("/api/auth/register")) {
             return true;
         }
         
-        // Rutas de reconocimiento públicas
         if (path.contains("/recognition/health") || 
             path.contains("/recognition/categories") || 
             path.contains("/recognition/init-data")) {
             return true;
         }
         
-        // GET de productos es público (ver productos, categorías, buscar)
         if (path.startsWith("/api/products") && "GET".equals(method)) {
             return true;
         }
         
-        // GET de comentarios es público (ver comentarios de un producto)
         if (path.startsWith("/api/comments") && "GET".equals(method)) {
             return true;
         }
         
-        // Servir archivos estáticos (uploads)
         if (path.startsWith("/uploads/")) {
             return true;
         }
@@ -109,9 +93,6 @@ public class JwtInterceptor implements HandlerInterceptor {
         return false;
     }
     
-    /**
-     * Envía una respuesta de error en formato JSON
-     */
     private void sendErrorResponse(HttpServletResponse response, int status, String message) throws Exception {
         response.setStatus(status);
         response.setContentType("application/json");

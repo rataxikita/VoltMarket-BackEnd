@@ -36,14 +36,12 @@ public class User {
         USER, ADMIN
     }
 
-    /*para hacer auditorias de la tabla*/
-
     @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now(); //fecha de creacion
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    private LocalDateTime updatedAt; //fecha de actualizacion
+    private LocalDateTime updatedAt;
 
-    @PreUpdate//Se ejecuta automáticamente antes de cada UPDATE
+    @PreUpdate
     public void preUpdate() {
         this.updatedAt = LocalDateTime.now();
     }

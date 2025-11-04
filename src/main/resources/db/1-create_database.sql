@@ -98,3 +98,4 @@ SHOW TABLES;
 
 SELECT 'Base de datos voltmarket_db creada exitosamente' AS status;
 
+   

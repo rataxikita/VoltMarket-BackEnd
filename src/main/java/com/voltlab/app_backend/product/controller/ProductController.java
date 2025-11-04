@@ -78,7 +78,6 @@ public class ProductController {
         return ResponseEntity.ok(productService.findByUser(userId));
     }
 
-    // Manejo básico de errores locales
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, Object> errors = new HashMap<>();

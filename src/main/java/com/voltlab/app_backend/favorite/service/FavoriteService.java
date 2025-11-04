@@ -42,9 +42,6 @@ public class FavoriteService {
         favoriteRepository.deleteByUserIdAndProduct_Id(userId, productId);
     }
 
-    /**
-     * Verificar si un producto está en favoritos del usuario
-     */
     public boolean isFavorite(Long userId, Long productId) {
         return favoriteRepository.findByUserIdAndProduct_Id(userId, productId).isPresent();
     }

@@ -32,35 +32,18 @@ public class AuthController {
 
     private final AuthService authService;
 
-    /**
-     * Registro de usuarios.
-     * - Valida el payload con @Valid.
-     * - Si el email ya existe, el servicio lanza RuntimeException -> 400.
-     * - Devuelve datos básicos del usuario registrado.
-     */
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
         AuthResponse response = authService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    /**
-     * Login de usuarios.
-     * - Valida el payload con @Valid.
-     * - Si las credenciales son inválidas, el servicio lanza RuntimeException -> 400.
-     * - Devuelve datos básicos del usuario autenticado.
-     */
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         AuthResponse response = authService.login(request);
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Actualización básica de perfil (nombre / apellido) por id de usuario.
-     * - Requiere un userId válido en la ruta.
-     * - Campos opcionales en el cuerpo (se actualiza solo lo enviado y no vacío).
-     */
     @PutMapping("/profile/{userId}")
     public ResponseEntity<Map<String, Object>> updateProfile(
             @PathVariable("userId") Long userId,
@@ -73,13 +56,6 @@ public class AuthController {
         return ResponseEntity.ok(body);
     }
 
-    // =====================
-    // Manejo básico de errores
-    // =====================
-
-    /**
-     * Maneja errores de validación de @Valid, devolviendo 400 y un mapa de errores por campo.
-     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, Object> errors = new HashMap<>();
@@ -94,10 +70,6 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
-    /**
-     * Endpoint para verificar el token actual (útil para debugging).
-     * Requiere autenticación - si llega aquí, el token es válido.
-     */
     @GetMapping("/verify-token")
     public ResponseEntity<Map<String, Object>> verifyToken() {
         Map<String, Object> response = new HashMap<>();
@@ -106,40 +78,7 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Endpoint temporal de diagnóstico para verificar usuarios y contraseñas.
-     * SOLO PARA DESARROLLO - ELIMINAR EN PRODUCCIÓN
-     */
-    @GetMapping("/debug/user/{email}")
-    public ResponseEntity<Map<String, Object>> debugUser(@PathVariable String email) {
-        Map<String, Object> response = new HashMap<>();
-        try {
-            var userOpt = authService.findUserByEmail(email);
-            if (userOpt.isPresent()) {
-                var user = userOpt.get();
-                response.put("exists", true);
-                response.put("id", user.getId());
-                response.put("email", user.getEmail());
-                response.put("nombre", user.getNombre());
-                response.put("apellido", user.getApellido());
-                response.put("role", user.getRole());
-                response.put("passwordHash", user.getPassword());
-                response.put("createdAt", user.getCreatedAt());
-            } else {
-                response.put("exists", false);
-                response.put("message", "Usuario no encontrado");
-            }
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            response.put("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
-    }
-
-    /**
-     * Maneja errores simples de negocio (RuntimeException) devolviendo 400 con el mensaje.
-     * Para un manejo más fino, podrían usarse excepciones específicas con distintos estados.
-     */
+    
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String, Object>> handleRuntimeExceptions(RuntimeException ex) {
         Map<String, Object> body = new HashMap<>();

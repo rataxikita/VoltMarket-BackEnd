@@ -24,15 +24,10 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
 
-    /**
-     * Genera un SKU automáticamente basado en la categoría
-     */
     private String generateSku(Long categoryId) {
-        // Obtener categoría
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
         
-        // Map de prefijos por nombre de categoría
         String prefix = switch(category.getNombre().toUpperCase()) {
             case "BATERÍAS", "BATERIAS" -> "BAT";
             case "FRENOS" -> "FRE";
@@ -98,16 +93,12 @@ public class ProductService {
 
     @Transactional
     public ProductResponse create(CreateProductRequest request, Long userId) {
-        // Obtener el usuario
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         
         Product product = new Product();
-        
-        // Asignar el usuario al producto
         product.setUsuario(user);
         
-        // Si no se proporciona SKU, generarlo automáticamente
         String sku = request.getSku();
         if (sku == null || sku.isBlank()) {
             Long categoryId = request.getCategoryId();
@@ -145,7 +136,6 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    // CRUD categoría simple
     public List<CategoryResponse> listCategories() {
         return categoryRepository.findAll().stream()
                 .map(c -> new CategoryResponse(c.getId(), c.getNombre(), c.getDescripcion()))
