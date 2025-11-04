@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "favorites", indexes = {
-        @Index(name = "idx_fav_user", columnList = "userId")
+        @Index(name = "idx_fav_user", columnList = "user_id")
 }, uniqueConstraints = {
-        @UniqueConstraint(name = "uk_fav_user_product", columnNames = {"userId", "product_id"})
+        @UniqueConstraint(name = "uk_fav_user_product", columnNames = {"user_id", "product_id"})
 })
 @Getter
 @Setter
@@ -21,7 +21,7 @@ public class Favorite {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "user_id", nullable = false)
     private Long userId;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)

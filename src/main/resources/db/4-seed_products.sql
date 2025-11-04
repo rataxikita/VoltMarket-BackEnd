@@ -2,6 +2,23 @@
 -- Productos adicionales basados en las categorías existentes (1-8)
 -- Compatible con Xiaomi M365, Ninebot, Segway y otros scooters eléctricos
 
+-- ============================================
+-- INSERTAR CATEGORÍAS
+-- ============================================
+INSERT INTO categories (id, nombre, descripcion) VALUES 
+(1, 'BATERÍAS', 'Baterías de litio y sistemas de almacenamiento de energía para scooters eléctricos. Compatible con modelos Xiaomi, Ninebot, Segway y otros.'),
+(2, 'FRENOS', 'Sistemas de frenado, discos, pastillas, cables y manetas de freno para scooters eléctricos.'),
+(3, 'NEUMÁTICOS', 'Neumáticos inflables y sólidos, cámaras de aire y kits de reparación para diferentes tamaños de rueda.'),
+(4, 'MOTORES', 'Motores brushless de diferentes potencias para scooters eléctricos. Desde 150W hasta 500W.'),
+(5, 'ILUMINACIÓN', 'Luces delanteras, traseras, LED RGB y accesorios de iluminación para mayor visibilidad y seguridad.'),
+(6, 'MANILLAR Y ACCESORIOS', 'Manillares, grips, soportes para móviles, timbres y accesorios para el manillar del scooter.'),
+(7, 'ELECTRÓNICA Y CONTROLADORES', 'Displays, controladores de motor, BMS, aceleradores y componentes electrónicos para gestión del scooter.'),
+(8, 'HERRAMIENTAS Y ACCESORIOS', 'Herramientas de mantenimiento, infladores, bolsos de transporte, candados, guardabarros y accesorios varios.');
+
+-- ============================================
+-- INSERTAR PRODUCTOS
+-- ============================================
+
 -- Categoría 1: BATERÍAS
 INSERT INTO products (nombre, descripcion, precio, stock, category_id, marca, image_url, sku, activo, created_at, updated_at) VALUES 
 ('Batería Ninebot ES2 36V 5.2Ah', 'Batería de litio original para Ninebot ES1/ES2, 187.2Wh', 149990.00, 3, 1, 'Ninebot', 'https://http2.mlstatic.com/D_NQ_NP_2X_8901.jpg', 'BAT-002', 1, '2025-10-25 00:24:43', '2025-10-25 00:25:00'),
