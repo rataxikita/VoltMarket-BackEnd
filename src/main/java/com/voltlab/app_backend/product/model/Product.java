@@ -1,5 +1,6 @@
 package com.voltlab.app_backend.product.model;
 
+import com.voltlab.app_backend.model.User;
 import com.voltlab.app_backend.product.model.category.Category;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -40,6 +41,10 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category categoria;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User usuario;
 
     @Column(length = 120)
     private String marca;

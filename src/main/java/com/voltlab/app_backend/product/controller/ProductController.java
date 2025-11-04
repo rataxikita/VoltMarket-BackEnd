@@ -43,8 +43,10 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductResponse> create(@Valid @RequestBody CreateProductRequest request) {
-        ProductResponse response = productService.create(request);
+    public ResponseEntity<ProductResponse> create(
+            @Valid @RequestBody CreateProductRequest request,
+            @RequestAttribute("userId") Long userId) {
+        ProductResponse response = productService.create(request, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -69,6 +71,11 @@ public class ProductController {
     @GetMapping("/categories")
     public ResponseEntity<List<CategoryResponse>> categories() {
         return ResponseEntity.ok(productService.listCategories());
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<ProductResponse>> getByUser(@PathVariable("userId") Long userId) {
+        return ResponseEntity.ok(productService.findByUser(userId));
     }
 
     // Manejo básico de errores locales

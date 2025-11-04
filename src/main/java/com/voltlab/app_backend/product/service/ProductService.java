@@ -1,5 +1,7 @@
 package com.voltlab.app_backend.product.service;
 
+import com.voltlab.app_backend.model.User;
+import com.voltlab.app_backend.repository.UserRepository;
 import com.voltlab.app_backend.product.dto.CategoryResponse;
 import com.voltlab.app_backend.product.dto.CreateProductRequest;
 import com.voltlab.app_backend.product.dto.ProductResponse;
@@ -20,6 +22,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
     /**
      * Genera un SKU automáticamente basado en la categoría
@@ -83,6 +86,10 @@ public class ProductService {
         return productRepository.findByCategoria_Id(categoryId).stream().map(this::toResponse).toList();
     }
 
+    public List<ProductResponse> findByUser(Long userId) {
+        return productRepository.findByUsuario_Id(userId).stream().map(this::toResponse).toList();
+    }
+
     public ProductResponse findById(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
@@ -90,8 +97,15 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponse create(CreateProductRequest request) {
+    public ProductResponse create(CreateProductRequest request, Long userId) {
+        // Obtener el usuario
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        
         Product product = new Product();
+        
+        // Asignar el usuario al producto
+        product.setUsuario(user);
         
         // Si no se proporciona SKU, generarlo automáticamente
         String sku = request.getSku();
