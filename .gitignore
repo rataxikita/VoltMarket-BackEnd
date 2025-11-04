@@ -40,8 +40,6 @@ src/main/resources/keys/
 *.json
 
 # Configuraciones sensibles de aplicación
-src/main/resources/application*.properties
-!src/main/resources/application.properties.example
 
 # Logs y archivos temporales
 *.log
